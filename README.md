@@ -1,2 +1,21 @@
-# vector-graphic-editor
-A collaborative educational project for developing a fully functional vector graphics editor application.
+# VecEditor
+
+Учебный проект: векторный графический редактор на C# с архитектурой MVVM.
+
+## Цели
+- Рисование и редактирование базовых фигур (line/rect/circle/…)
+- Экспорт/импорт (JSON, SVG, PNG)
+- Покрытие ключевой логики тестами
+
+## Команда
+- Тимлид: Шестаков Алексей
+- GUI:
+- Geometry:
+- IO:
+- ViewModel:
+- Тестировщики:
+
+## Структура репозитория
+- `src/` — исходники приложения и библиотек
+- `tests/` — тесты
+- `docs/` — договорённости/схемы (опционально)
