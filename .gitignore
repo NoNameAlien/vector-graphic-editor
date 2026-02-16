@@ -1,0 +1,29 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+
+## Rider / other IDEs
+.idea/
+*.iml
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log
+
+## NuGet
+*.nupkg
+packages/
+.nuget/
+
+## Avalonia (обычно ничего особенного, но пусть будет)
+**/Assets/.cache/
