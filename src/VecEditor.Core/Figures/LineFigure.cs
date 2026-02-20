@@ -1,8 +1,11 @@
-﻿using System;
+using System;
+using System.Composition;
 using VecEditor.Core.Geometry;
 
 namespace VecEditor.Core.Figures;
 
+[Export(typeof(IFigure))]
+[ExportMetadata("Name", nameof(LineFigure))]
 public sealed class LineFigure : IFigure
 {
     public Guid Id { get; } = Guid.NewGuid();
@@ -16,4 +19,6 @@ public sealed class LineFigure : IFigure
         A = a;
         B = b;
     }
+
+    public IFigure Clone() => throw new NotImplementedException();
 }
