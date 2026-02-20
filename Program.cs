@@ -1,4 +1,5 @@
-﻿using Avalonia;
+using Avalonia;
+using ReactiveUI.Avalonia;
 using System;
 
 namespace vector_graphic_editor
@@ -17,6 +18,7 @@ namespace vector_graphic_editor
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
+                .UseReactiveUI()
                 .LogToTrace();
     }
 }
