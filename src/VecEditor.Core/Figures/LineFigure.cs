@@ -1,5 +1,6 @@
 using System;
 using System.Composition;
+using Newtonsoft.Json;
 using VecEditor.Core.Geometry;
 
 namespace VecEditor.Core.Figures;
@@ -12,6 +13,7 @@ public sealed class LineFigure : IFigure
     public Point2 A { get; }
     public Point2 B { get; }
 
+    [JsonIgnore]
     public RectD Bounds => RectD.FromTwoPoints(A, B);
 
     public LineFigure(Point2 a, Point2 b)
