@@ -31,7 +31,6 @@
 		</Menu>
 
 		<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
-		<!-- Используем UniformGrid для равномерного распределения колонок -->
 		<UniformGrid Grid.Row="1"
                      Rows="1"
                      Columns="3"
@@ -117,10 +116,6 @@
                               Fill="Transparent"
                               StrokeThickness="2"/>
 					</Button>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Star">
-						<TextBlock Text="⭐" FontSize="24"/>
-					</Button>
 				</StackPanel>
 			</Border>
 
@@ -137,18 +132,6 @@
                                FontSize="14"
                                FontWeight="Bold"
                                Foreground="Gray"/>
-					<TextBlock Text="Скоро здесь появятся:"
-                               FontSize="11"
-                               HorizontalAlignment="Center"/>
-					<TextBlock Text="- Цвета"
-                               FontSize="10"
-                               Margin="5,0,0,0"/>
-					<TextBlock Text="- Толщина линий"
-                               FontSize="10"
-                               Margin="5,0,0,0"/>
-					<TextBlock Text="- Стили"
-                               FontSize="10"
-                               Margin="5,0,0,0"/>
 				</StackPanel>
 			</Border>
 		</UniformGrid>
@@ -161,18 +144,12 @@
                 CornerRadius="3"
                 Background="WhiteSmoke">
 
-			<!-- Здесь будет канвас для рисования, пока просто текст -->
 			<TextBlock Text="Рабочая область (пока пустая)"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="Gray"
                        FontSize="16"/>
 
-			<!-- В будущем здесь будет что-то вроде:
-            <Canvas Name="DrawingCanvas"
-                    Background="Transparent"
-                    ClipToBounds="True"/>
-            -->
 		</Border>
 	</Grid>
 
