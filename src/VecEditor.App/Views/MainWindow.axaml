@@ -35,14 +35,16 @@
                      Rows="1"
                      Columns="3"
                      Margin="5"
-                     Height="80">
+                     Height="80"
+					 Background="">
 
 			<!-- Колонка 1: Карандашные инструменты -->
 			<Border BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
-                    Padding="5">
+                    Padding="5"
+					Background="Gray">
 				<StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -50,29 +52,19 @@
 
 					<!-- Кнопки карандашных инструментов -->
 					<Button Width="40" Height="40" ToolTip.Tip="Pen">
-						<TextBlock Text="✎" FontSize="24"/>
+						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
 					</Button>
 
 					<Button Width="40" Height="40" ToolTip.Tip="Pencil">
-						<TextBlock Text="✏️" FontSize="24"/>
+						<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
 					</Button>
 
 					<Button Width="40" Height="40" ToolTip.Tip="Brush">
-						<TextBlock Text="🖌️" FontSize="24"/>
+						<Image Source="/Assets/brush.png" Width="32" Height="32"/>
 					</Button>
 
 					<Button Width="40" Height="40" ToolTip.Tip="Eraser">
-						<TextBlock Text="🧽" FontSize="24"/>
-					</Button>
-
-					<TextBlock Text="|" FontSize="30" VerticalAlignment="Center"/>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Line">
-						<TextBlock Text="/" FontSize="30" FontWeight="Bold"/>
-					</Button>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Arrow">
-						<TextBlock Text="→" FontSize="30"/>
+						<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
 					</Button>
 				</StackPanel>
 			</Border>
@@ -82,7 +74,8 @@
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
-                    Padding="5">
+                    Padding="5"
+					Background="Gray">
 				<StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -111,10 +104,19 @@
 					</Button>
 
 					<Button Width="40" Height="40" ToolTip.Tip="Triangle">
-						<Path Data="M 0,20 L 20,20 L 10,0 Z"
+						<Path Data="M 0,25 L 20,25 L 10,3 Z"
                               Stroke="Black"
                               Fill="Transparent"
                               StrokeThickness="2"/>
+					</Button>
+
+
+					<Button Width="40" Height="40" ToolTip.Tip="Line">
+						<Image Source="/Assets/line.png" Width="32" Height="32"/>
+					</Button>
+
+					<Button Width="40" Height="40" ToolTip.Tip="Arrow">
+						<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
 					</Button>
 				</StackPanel>
 			</Border>
@@ -125,7 +127,7 @@
                     CornerRadius="3"
                     Margin="2"
                     Padding="5"
-                    Background="#FFF0F0F0">
+                    Background="">
 				<StackPanel HorizontalAlignment="Center"
                             VerticalAlignment="Center">
 					<TextBlock Text="🚧 Work In Progress 🚧"
