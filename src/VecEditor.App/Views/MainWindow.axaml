@@ -3,6 +3,7 @@
         xmlns:vm="using:VecEditor.App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:VecEditor.App.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="VecEditor.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -50,22 +51,29 @@
                             VerticalAlignment="Center"
                             Spacing="10">
 
-					<!-- Кнопки карандашных инструментов -->
-					<Button Width="40" Height="40" ToolTip.Tip="Pen">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
+								  IsChecked="{Binding IsPenActive}"
+								  Command="{Binding SelectPenCommand}">
 						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Pencil">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
+								  IsChecked="{Binding IsPencilActive}"
+								  Command="{Binding SelectPencilCommand}">
 						<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Brush">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
+								  IsChecked="{Binding IsBrushActive}"
+								  Command="{Binding SelectBrushCommand}">
 						<Image Source="/Assets/brush.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Eraser">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Eraser"
+								  IsChecked="{Binding IsEraserActive}"
+								  Command="{Binding SelectEraserCommand}">
 						<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 				</StackPanel>
 			</Border>
 
@@ -146,7 +154,7 @@
                 CornerRadius="3"
                 Background="WhiteSmoke">
 
-			<TextBlock Text="Рабочая область (пока пустая)"
+			<TextBlock Text="{Binding SelectedTool}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="Gray"
