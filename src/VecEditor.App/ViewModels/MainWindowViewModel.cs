@@ -10,7 +10,6 @@ public partial class MainWindowViewModel : ReactiveObject
     public enum ToolType
     {
         None,
-        Pen,
         Pencil,
         Brush,
         Eraser
@@ -25,28 +24,23 @@ public partial class MainWindowViewModel : ReactiveObject
     }
 
     // Свойства для UI
-    public bool IsPenActive => SelectedTool == ToolType.Pen;
     public bool IsPencilActive => SelectedTool == ToolType.Pencil;
     public bool IsBrushActive => SelectedTool == ToolType.Brush;
     public bool IsEraserActive => SelectedTool == ToolType.Eraser;
 
     // Команды для каждой кнопки
-    public ICommand SelectPenCommand { get; }
     public ICommand SelectPencilCommand { get; }
     public ICommand SelectBrushCommand { get; }
     public ICommand SelectEraserCommand { get; }
 
     public bool IsToolSelected => SelectedTool != ToolType.None;
-    public bool IsDrawingTool => SelectedTool == ToolType.Pen ||
-                                  SelectedTool == ToolType.Pencil ||
-                                  SelectedTool == ToolType.Brush;
+    public bool IsDrawingTool => SelectedTool == ToolType.Pencil || SelectedTool == ToolType.Brush;
 
     public MainWindowViewModel()
     {
         SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
 
         // Инициализация команд
-        SelectPenCommand = new RelayCommand(() => SelectTool(ToolType.Pen));
         SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
         SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));  // Не надо, это из тулкид ReactiveComamand.Create
         // ObservableAsPropertyHelper можно посмотреть
@@ -57,7 +51,6 @@ public partial class MainWindowViewModel : ReactiveObject
             .Subscribe(tool =>
             {
                 // Обновляем UI свойства
-                this.RaisePropertyChanged(nameof(IsPenActive));
                 this.RaisePropertyChanged(nameof(IsPencilActive));
                 this.RaisePropertyChanged(nameof(IsBrushActive));
                 this.RaisePropertyChanged(nameof(IsEraserActive));
@@ -85,9 +78,6 @@ public partial class MainWindowViewModel : ReactiveObject
         // Здесь логика 
         switch (newTool)
         {
-            case ToolType.Pen:
-                // Активировать перо
-                break;
             case ToolType.Pencil:
                 // Активировать карандаш
                 break;
