@@ -36,7 +36,6 @@ public partial class MainWindowViewModel : ReactiveObject
     public ICommand SelectBrushCommand { get; }
     public ICommand SelectEraserCommand { get; }
 
-    // Логические свойства для удобства работы
     public bool IsToolSelected => SelectedTool != ToolType.None;
     public bool IsDrawingTool => SelectedTool == ToolType.Pen ||
                                   SelectedTool == ToolType.Pencil ||
@@ -49,7 +48,8 @@ public partial class MainWindowViewModel : ReactiveObject
         // Инициализация команд
         SelectPenCommand = new RelayCommand(() => SelectTool(ToolType.Pen));
         SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
-        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));
+        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));  // Не надо, это из тулкид ReactiveComamand.Create
+        // ObservableAsPropertyHelper можно посмотреть
         SelectEraserCommand = new RelayCommand(() => SelectTool(ToolType.Eraser));
 
         // Реакция на изменение инструмента
@@ -64,7 +64,6 @@ public partial class MainWindowViewModel : ReactiveObject
                 this.RaisePropertyChanged(nameof(IsToolSelected));
                 this.RaisePropertyChanged(nameof(IsDrawingTool));
 
-                // Здесь можно добавить дополнительную логику
                 HandleToolChanged(tool);
             });
     }
