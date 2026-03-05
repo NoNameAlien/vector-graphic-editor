@@ -3,6 +3,7 @@
         xmlns:vm="using:VecEditor.App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:VecEditor.App.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="VecEditor.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -30,59 +31,58 @@
 			</MenuItem>
 		</Menu>
 
+
 		<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
-		<UniformGrid Grid.Row="1"
-                     Rows="1"
-                     Columns="3"
-                     Margin="5"
-                     Height="80">
+		<Grid Grid.Row="1" Margin="5" Height="80">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
 
 			<!-- Колонка 1: Карандашные инструменты -->
-			<Border BorderBrush="Gray"
+			<Border Grid.Column="0" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
-                    Padding="5">
+                    Padding="5"
+					Background="Gray">
 				<StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Spacing="10">
 
-					<!-- Кнопки карандашных инструментов -->
-					<Button Width="40" Height="40" ToolTip.Tip="Pen">
-						<TextBlock Text="✎" FontSize="24"/>
-					</Button>
+					<!--// Mode=OneWay
+					// Посмотреть Стили
+					// SVG Библиотек -->
+					<!-- SVG библиотека в телеге -->
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
+								  IsChecked="{Binding IsPencilActive}"
+								  Command="{Binding SelectPencilCommand}">
+						<Image Source="/Assets/pencil.png"/>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Pencil">
-						<TextBlock Text="✏️" FontSize="24"/>
-					</Button>
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
+								  IsChecked="{Binding IsBrushActive}"
+								  Command="{Binding SelectBrushCommand}">
+						<Image Source="/Assets/brush.png" Width="32" Height="32"/>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Brush">
-						<TextBlock Text="🖌️" FontSize="24"/>
-					</Button>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Eraser">
-						<TextBlock Text="🧽" FontSize="24"/>
-					</Button>
-
-					<TextBlock Text="|" FontSize="30" VerticalAlignment="Center"/>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Line">
-						<TextBlock Text="/" FontSize="30" FontWeight="Bold"/>
-					</Button>
-
-					<Button Width="40" Height="40" ToolTip.Tip="Arrow">
-						<TextBlock Text="→" FontSize="30"/>
-					</Button>
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Eraser"
+								  IsChecked="{Binding IsEraserActive}"
+								  Command="{Binding SelectEraserCommand}">
+						<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
+					</ToggleButton>
 				</StackPanel>
 			</Border>
 
 			<!-- Колонка 2: Фигуры -->
-			<Border BorderBrush="Gray"
+			<Border Grid.Column="1" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
-                    Padding="5">
+                    Padding="5"
+					Background="Gray">
 				<StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -111,21 +111,30 @@
 					</Button>
 
 					<Button Width="40" Height="40" ToolTip.Tip="Triangle">
-						<Path Data="M 0,20 L 20,20 L 10,0 Z"
+						<Path Data="M 0,25 L 20,25 L 10,3 Z"
                               Stroke="Black"
                               Fill="Transparent"
                               StrokeThickness="2"/>
 					</Button>
+
+
+					<Button Width="40" Height="40" ToolTip.Tip="Line">
+						<Image Source="/Assets/line.png" Width="32" Height="32"/>
+					</Button>
+
+					<Button Width="40" Height="40" ToolTip.Tip="Arrow">
+						<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
+					</Button>
 				</StackPanel>
 			</Border>
 
-			<!-- Колонка 3: Work In Progress (заглушка) -->
-			<Border BorderBrush="Gray"
+			<!-- Колонка 3: Work In Progress -->
+			<Border Grid.Column="2" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
                     Padding="5"
-                    Background="#FFF0F0F0">
+                    Background="">
 				<StackPanel HorizontalAlignment="Center"
                             VerticalAlignment="Center">
 					<TextBlock Text="🚧 Work In Progress 🚧"
@@ -134,7 +143,7 @@
                                Foreground="Gray"/>
 				</StackPanel>
 			</Border>
-		</UniformGrid>
+		</Grid>
 
 		<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
 		<Border Grid.Row="2"
@@ -144,7 +153,7 @@
                 CornerRadius="3"
                 Background="WhiteSmoke">
 
-			<TextBlock Text="Рабочая область (пока пустая)"
+			<TextBlock Text="{Binding SelectedTool}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="Gray"

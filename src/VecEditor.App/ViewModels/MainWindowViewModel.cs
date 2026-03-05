@@ -1,23 +1,95 @@
-
-using System.Reactive;
-using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
-using ReactiveUI.SourceGenerators;
+using System.Reactive;
+using System.Windows.Input;
 
 namespace VecEditor.App.ViewModels;
 
-public partial class MainWindowViewModel:ReactiveObject
+public partial class MainWindowViewModel : ReactiveObject
 {
-    [Reactive] public partial string Greeting { get; set; } = "VecEditor";
-
-    public ReactiveCommand<Unit,Unit> Command { get; set; }
-
-    int count = 0;
-    public MainWindowViewModel()
+    public enum ToolType
     {
-        Command = ReactiveCommand.Create<Unit,Unit>(_ => { Greeting = count++.ToString(); return default; }, 
-            this.WhenAnyValue(t=>t.Greeting).Select(g=>g != "2"));
+        None,
+        Pencil,
+        Brush,
+        Eraser
     }
 
-    public VecEditor.ViewModel.MainViewModel Editor { get; } = new();
+    private ToolType _selectedTool;
+
+    public ToolType SelectedTool
+    {
+        get => _selectedTool;
+        set => this.RaiseAndSetIfChanged(ref _selectedTool, value);
+    }
+
+    // Свойства для UI
+    public bool IsPencilActive => SelectedTool == ToolType.Pencil;
+    public bool IsBrushActive => SelectedTool == ToolType.Brush;
+    public bool IsEraserActive => SelectedTool == ToolType.Eraser;
+
+    // Команды для каждой кнопки
+    public ICommand SelectPencilCommand { get; }
+    public ICommand SelectBrushCommand { get; }
+    public ICommand SelectEraserCommand { get; }
+
+    public bool IsToolSelected => SelectedTool != ToolType.None;
+    public bool IsDrawingTool => SelectedTool == ToolType.Pencil || SelectedTool == ToolType.Brush;
+
+    public MainWindowViewModel()
+    {
+        SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
+
+        // Инициализация команд
+        SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
+        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));  // Не надо, это из тулкид ReactiveComamand.Create
+        // ObservableAsPropertyHelper можно посмотреть
+        SelectEraserCommand = new RelayCommand(() => SelectTool(ToolType.Eraser));
+
+        // Реакция на изменение инструмента
+        this.WhenAnyValue(x => x.SelectedTool)
+            .Subscribe(tool =>
+            {
+                // Обновляем UI свойства
+                this.RaisePropertyChanged(nameof(IsPencilActive));
+                this.RaisePropertyChanged(nameof(IsBrushActive));
+                this.RaisePropertyChanged(nameof(IsEraserActive));
+                this.RaisePropertyChanged(nameof(IsToolSelected));
+                this.RaisePropertyChanged(nameof(IsDrawingTool));
+
+                HandleToolChanged(tool);
+            });
+    }
+
+    private void SelectTool(ToolType tool)
+    {
+        if (SelectedTool == tool)
+        {
+            SelectedTool = ToolType.None;
+        }
+        else
+        {
+            SelectedTool = tool;
+        }
+    }
+
+    private void HandleToolChanged(ToolType newTool)
+    {
+        // Здесь логика 
+        switch (newTool)
+        {
+            case ToolType.Pencil:
+                // Активировать карандаш
+                break;
+            case ToolType.Brush:
+                // Активировать кисть
+                break;
+            case ToolType.Eraser:
+                // Активировать ластик
+                break;
+            case ToolType.None:
+                // Отключить все инструменты
+                break;
+        }
+    }
 }
