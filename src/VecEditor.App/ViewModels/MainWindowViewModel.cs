@@ -1,3 +1,4 @@
+using Avalonia;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using System.Reactive;
@@ -39,6 +40,9 @@ public partial class MainWindowViewModel : ReactiveObject
     public MainWindowViewModel()
     {
         SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
+
+        tmp_points = new List<Point>();
+        objects = new List<prim_obj>();
 
         // Инициализация команд
         SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
@@ -92,4 +96,36 @@ public partial class MainWindowViewModel : ReactiveObject
                 break;
         }
     }
+
+    public void Add_point(Point point)
+    {
+        tmp_points.Add(point);
+        if (tmp_points.Count >= 2)
+        {
+            prim_obj prim_ = new prim_obj();
+            prim_.A = tmp_points[0];
+            prim_.B = tmp_points[1];
+            prim_.type = "Line";
+            objects.Add(prim_);
+            tmp_points.RemoveRange(0, 2);
+        }
+    }
+
+    public struct prim_obj
+    {
+        public string type;
+        public Point A;
+        public Point B;
+    }
+
+    public List<Point> tmp_points { get; set; }
+    public List<prim_obj> objects { get; set; }
+
+    int count = 0;
+  
+    public int Cnt()
+    {
+        return 0;
+    }
+
 }
