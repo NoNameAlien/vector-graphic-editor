@@ -1,13 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\VecEditor.Core\VecEditor.Core.csproj" />
-  </ItemGroup>
-
+  <!-- Свойства проекта -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!-- Ссылки на пакеты -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Svg" Version="3.4.4" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+  </ItemGroup>
+
+  <!-- Ссылки на другие проекты -->
+  <ItemGroup>
+    <ProjectReference Include="..\VecEditor.Core\VecEditor.Core.csproj" />
+  </ItemGroup>
 </Project>
