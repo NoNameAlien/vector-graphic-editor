@@ -1,6 +1,8 @@
 using Avalonia;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData.Binding;
 using ReactiveUI;
+using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Windows.Input;
 
@@ -8,60 +10,164 @@ namespace VecEditor.App.ViewModels;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
+
     public enum ToolType
     {
         None,
+        Pen,
         Pencil,
         Brush,
         Eraser
     }
 
-    private ToolType _selectedTool;
+    public enum PrimitiveType
+    {
+        None,
+        Rectangle,
+        Circle,
+        Ellipse,
+        Triangle,
+        Arrow,
+        Line
+    }
+
+    // Контейнер для примитива
+    public class PrimitiveObject
+    {
+        public PrimitiveType primitiveType { get; set; }
+        public ToolType toolType { get; set; }
+        public List<Point> ObjectPoints { get; set; }
+        public PrimitiveObject(PrimitiveType pt, ToolType tt, List<Point> pts)
+        {
+            primitiveType = pt;
+            toolType = tt;
+            ObjectPoints = pts;
+        }
+    }
 
     public ToolType SelectedTool
     {
-        get => _selectedTool;
-        set => this.RaiseAndSetIfChanged(ref _selectedTool, value);
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
     }
 
-    // РЎРІРѕР№СЃС‚РІР° РґР»СЏ UI
+    public PrimitiveType SelectedPrimitive
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    // Список примитивов
+    public ObservableCollection<PrimitiveObject> primitiveObjects
+    {
+        get => field;
+        set => field = value;
+    }
+
+    public List<Point> temp_points
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value.ToList());
+    }
+
+    public void add_point(Point tmp)
+    {
+        if (SelectedPrimitive != PrimitiveType.Line)
+        {
+            return;
+        }
+        temp_points.Add(tmp);
+        if (temp_points.Count >= 2) // Заменить на количество точек для текущего примитива
+        {
+            PrimitiveObject tmp_obj = new PrimitiveObject(SelectedPrimitive, SelectedTool, temp_points.GetRange(0, 2)); // Заменить на количество точек для текущего примитива
+            primitiveObjects.Add(tmp_obj);
+            temp_points.RemoveRange(0, 2);
+        }
+    }
+    
+    // Свойства для UI
+    public bool IsPenActive => SelectedTool == ToolType.Pen;
     public bool IsPencilActive => SelectedTool == ToolType.Pencil;
     public bool IsBrushActive => SelectedTool == ToolType.Brush;
     public bool IsEraserActive => SelectedTool == ToolType.Eraser;
 
-    // РљРѕРјР°РЅРґС‹ РґР»СЏ РєР°Р¶РґРѕР№ РєРЅРѕРїРєРё
+    public bool IsRectangleActive => SelectedPrimitive == PrimitiveType.Rectangle;
+    public bool IsTriangleActive => SelectedPrimitive == PrimitiveType.Triangle;
+    public bool IsCircleActive => SelectedPrimitive == PrimitiveType.Circle;
+    public bool IsEllipseActive => SelectedPrimitive == PrimitiveType.Ellipse;
+    public bool IsArrowActive => SelectedPrimitive == PrimitiveType.Arrow;
+    public bool IsLineActive => SelectedPrimitive == PrimitiveType.Line;
+
+    public System.Drawing.Point Start, End;
+
+    // Команды для каждой кнопки
+    public ICommand SelectPenCommand { get; }
     public ICommand SelectPencilCommand { get; }
     public ICommand SelectBrushCommand { get; }
     public ICommand SelectEraserCommand { get; }
 
+    public ICommand SelectRectangleCommand { get; }
+    public ICommand SelectTriangleCommand { get; }
+    public ICommand SelectCircleCommand { get; }
+    public ICommand SelectEllipseCommand { get; }
+    public ICommand SelectArrowCommand { get; }
+    public ICommand SelectLineCommand { get; }
+
+    // Логические свойства для удобства работы
     public bool IsToolSelected => SelectedTool != ToolType.None;
-    public bool IsDrawingTool => SelectedTool == ToolType.Pencil || SelectedTool == ToolType.Brush;
+    public bool IsDrawingTool => SelectedTool == ToolType.Pen ||
+                                  SelectedTool == ToolType.Pencil ||
+                                  SelectedTool == ToolType.Brush;
 
     public MainWindowViewModel()
     {
-        SelectedTool = ToolType.None; // РќРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°РЅРѕ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+        SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
+        SelectedPrimitive = PrimitiveType.None;
+        primitiveObjects = new ObservableCollection<PrimitiveObject>();
+        temp_points = new List<Point>();
 
-        tmp_points = new List<Point>();
-        objects = new List<prim_obj>();
-
-        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРјР°РЅРґ
+        // Инициализация команд
+        SelectPenCommand = new RelayCommand(() => SelectTool(ToolType.Pen));
         SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
-        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));  // РќРµ РЅР°РґРѕ, СЌС‚Рѕ РёР· С‚СѓР»РєРёРґ ReactiveComamand.Create
-        // ObservableAsPropertyHelper РјРѕР¶РЅРѕ РїРѕСЃРјРѕС‚СЂРµС‚СЊ
+        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));
         SelectEraserCommand = new RelayCommand(() => SelectTool(ToolType.Eraser));
+        
+        SelectRectangleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Rectangle));
+        SelectTriangleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Triangle));
+        SelectCircleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Circle));
+        SelectEllipseCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Ellipse));
+        SelectArrowCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Arrow));
+        SelectLineCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Line));
 
-        // Р РµР°РєС†РёСЏ РЅР° РёР·РјРµРЅРµРЅРёРµ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°
+        // Реакция на изменение инструмента
         this.WhenAnyValue(x => x.SelectedTool)
             .Subscribe(tool =>
             {
-                // РћР±РЅРѕРІР»СЏРµРј UI СЃРІРѕР№СЃС‚РІР°
+                // Обновляем UI свойства
+                this.RaisePropertyChanged(nameof(IsPenActive));
                 this.RaisePropertyChanged(nameof(IsPencilActive));
                 this.RaisePropertyChanged(nameof(IsBrushActive));
                 this.RaisePropertyChanged(nameof(IsEraserActive));
                 this.RaisePropertyChanged(nameof(IsToolSelected));
                 this.RaisePropertyChanged(nameof(IsDrawingTool));
 
+                // Здесь можно добавить дополнительную логику
                 HandleToolChanged(tool);
+            });
+
+        this.WhenAnyValue(x => x.SelectedPrimitive)
+            .Subscribe(primitive =>
+            {
+                // Обновляем UI свойства
+                this.RaisePropertyChanged(nameof(IsRectangleActive));
+                this.RaisePropertyChanged(nameof(IsTriangleActive));
+                this.RaisePropertyChanged(nameof(IsCircleActive));
+                this.RaisePropertyChanged(nameof(IsEllipseActive));
+                this.RaisePropertyChanged(nameof(IsLineActive));
+                this.RaisePropertyChanged(nameof(IsArrowActive));
+
+                // Здесь можно добавить дополнительную логику
+                HandlePrimitiveChanged(primitive);
             });
     }
 
@@ -77,55 +183,61 @@ public partial class MainWindowViewModel : ReactiveObject
         }
     }
 
+    private void SelectPrimitive(PrimitiveType primitive)
+    {
+        if (SelectedPrimitive == primitive)
+        {
+            SelectedPrimitive = PrimitiveType.None;
+        }
+        else
+        {
+            SelectedPrimitive = primitive;
+        }
+    }
+
     private void HandleToolChanged(ToolType newTool)
     {
-        // Р—РґРµСЃСЊ Р»РѕРіРёРєР° 
+        // Здесь логика 
         switch (newTool)
         {
             case ToolType.Pencil:
-                // РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РєР°СЂР°РЅРґР°С€
+                // Активировать карандаш
                 break;
             case ToolType.Brush:
-                // РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РєРёСЃС‚СЊ
+                // Активировать кисть
                 break;
             case ToolType.Eraser:
-                // РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ Р»Р°СЃС‚РёРє
+                // Активировать ластик
                 break;
             case ToolType.None:
-                // РћС‚РєР»СЋС‡РёС‚СЊ РІСЃРµ РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹
+                // Отключить все инструменты
                 break;
         }
     }
 
-    public void Add_point(Point point)
+    private void HandlePrimitiveChanged(PrimitiveType newPrimitive)
     {
-        tmp_points.Add(point);
-        if (tmp_points.Count >= 2)
+        // Здесь логика 
+        switch (newPrimitive)
         {
-            prim_obj prim_ = new prim_obj();
-            prim_.A = tmp_points[0];
-            prim_.B = tmp_points[1];
-            prim_.type = "Line";
-            objects.Add(prim_);
-            tmp_points.RemoveRange(0, 2);
+            case PrimitiveType.Rectangle:
+                // 
+                break;
+            case PrimitiveType.Circle:
+                // 
+                break;
+            case PrimitiveType.Ellipse:
+                // 
+                break;
+            case PrimitiveType.Triangle:
+                // 
+                break;
+            case PrimitiveType.Arrow:
+                //
+                break;
+            case PrimitiveType.None:
+                // Отключить все 
+                break;
         }
     }
-
-    public struct prim_obj
-    {
-        public string type;
-        public Point A;
-        public Point B;
-    }
-
-    public List<Point> tmp_points { get; set; }
-    public List<prim_obj> objects { get; set; }
-
-    int count = 0;
-  
-    public int Cnt()
-    {
-        return 0;
-    }
-
 }
