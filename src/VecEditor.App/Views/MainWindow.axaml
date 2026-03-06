@@ -31,17 +31,16 @@
 			</MenuItem>
 		</Menu>
 
-
 		<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
-		<Grid Grid.Row="1" Margin="5" Height="80">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="2*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+		<UniformGrid Grid.Row="1"
+                     Rows="1"
+                     Columns="3"
+                     Margin="5"
+                     Height="80"
+					 Background="">
 
 			<!-- Колонка 1: Карандашные инструменты -->
-			<Border Grid.Column="0" BorderBrush="Gray"
+			<Border BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -52,14 +51,16 @@
                             VerticalAlignment="Center"
                             Spacing="10">
 
-					<!--// Mode=OneWay
-					// Посмотреть Стили
-					// SVG Библиотек -->
-					<!-- SVG библиотека в телеге -->
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
+								  IsChecked="{Binding IsPenActive}"
+								  Command="{Binding SelectPenCommand}">
+						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
+					</ToggleButton>
+
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
 								  IsChecked="{Binding IsPencilActive}"
 								  Command="{Binding SelectPencilCommand}">
-						<Image Source="/Assets/pencil.png"/>
+						<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
 					</ToggleButton>
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
@@ -77,7 +78,7 @@
 			</Border>
 
 			<!-- Колонка 2: Фигуры -->
-			<Border Grid.Column="1" BorderBrush="Gray"
+			<Border BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -89,47 +90,60 @@
                             Spacing="10">
 
 					<!-- Кнопки для фигур -->
-					<Button Width="40" Height="40" ToolTip.Tip="Rectangle">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Rectangle"
+								  IsChecked="{Binding IsRectangleActive}"
+								  Command="{Binding SelectRectangleCommand}">
 						<Rectangle Width="30" Height="20"
                                    Fill="Transparent"
                                    Stroke="Black"
                                    StrokeThickness="2"/>
-					</Button>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Ellipse">
+					</ToggleButton>
+
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Ellipse"
+								  IsChecked="{Binding IsEllipseActive}"
+								  Command="{Binding SelectEllipseCommand}">
 						<Ellipse Width="30" Height="20"
                                  Fill="Transparent"
                                  Stroke="Black"
                                  StrokeThickness="2"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Circle">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Circle"
+								  IsChecked="{Binding IsCircleActive}"
+								  Command="{Binding SelectCircleCommand}">
 						<Ellipse Width="25" Height="25"
                                  Fill="Transparent"
                                  Stroke="Black"
                                  StrokeThickness="2"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Triangle">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Triangle"
+								  IsChecked="{Binding IsTriangleActive}"
+								  Command="{Binding SelectTriangleCommand}">
 						<Path Data="M 0,25 L 20,25 L 10,3 Z"
                               Stroke="Black"
                               Fill="Transparent"
                               StrokeThickness="2"/>
-					</Button>
+					</ToggleButton>
 
 
-					<Button Width="40" Height="40" ToolTip.Tip="Line">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Line"
+								  IsChecked="{Binding IsLineActive}"
+								  Command="{Binding SelectLineCommand}">
 						<Image Source="/Assets/line.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 
-					<Button Width="40" Height="40" ToolTip.Tip="Arrow">
+					<ToggleButton Width="40" Height="40" ToolTip.Tip="Arrow"
+								  IsChecked="{Binding IsArrowActive}"
+								  Command="{Binding SelectArrowCommand}">
 						<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
-					</Button>
+					</ToggleButton>
 				</StackPanel>
 			</Border>
 
-			<!-- Колонка 3: Work In Progress -->
-			<Border Grid.Column="2" BorderBrush="Gray"
+			<!-- Колонка 3: Work In Progress (заглушка) -->
+			<Border BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -143,7 +157,7 @@
                                Foreground="Gray"/>
 				</StackPanel>
 			</Border>
-		</Grid>
+		</UniformGrid>
 
 		<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
 		<Border Grid.Row="2"
@@ -152,13 +166,28 @@
                 Margin="5"
                 CornerRadius="3"
                 Background="WhiteSmoke">
+				
 
-			<TextBlock Text="{Binding SelectedTool}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="Gray"
-                       FontSize="16"/>
-
+		<ItemsControl ItemsSource="{Binding primitiveObjects}">
+        <!-- Указываем, что рисовать будем на Canvas -->
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas Name="canvas1"
+						Background="Transparent" 
+						PointerPressed="Canvas_PointerPressed"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        
+        <!-- Шаблон отрисовки каждой линии -->
+        <ItemsControl.ItemTemplate >
+            <DataTemplate DataType="vm:MainWindowViewModel+PrimitiveObject">
+                <Line StartPoint="{Binding ObjectPoints[0]}" 
+                      EndPoint="{Binding ObjectPoints[1]}" 
+                      Stroke="Red" 
+                      StrokeThickness="2"/>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+		</ItemsControl>
 		</Border>
 	</Grid>
 
