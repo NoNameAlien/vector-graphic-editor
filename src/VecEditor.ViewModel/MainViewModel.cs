@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using ReactiveUI;
 using System.Collections.ObjectModel;
@@ -99,24 +98,16 @@ public sealed class MainViewModel : ReactiveObject
 
     public System.Drawing.Point Start, End;
 
-    // Команды для каждой кнопки
-    public ICommand SelectPenCommand { get; }
-    public ICommand SelectPencilCommand { get; }
-    public ICommand SelectBrushCommand { get; }
-    public ICommand SelectEraserCommand { get; }
-
-    public ICommand SelectRectangleCommand { get; }
-    public ICommand SelectTriangleCommand { get; }
-    public ICommand SelectCircleCommand { get; }
-    public ICommand SelectEllipseCommand { get; }
-    public ICommand SelectArrowCommand { get; }
-    public ICommand SelectLineCommand { get; }
+    // Команды для кнопок примитивов и инструментов
+    public ReactiveCommand<PrimitiveType, Unit> SelectPrimitiveCommand { get; }
+    public ReactiveCommand<ToolType, Unit> SelectToolCommand { get; }
 
     // Логические свойства для удобства работы
     public bool IsToolSelected => SelectedTool != ToolType.None;
     public bool IsDrawingTool => SelectedTool == ToolType.Pen ||
                                   SelectedTool == ToolType.Pencil ||
                                   SelectedTool == ToolType.Brush;
+    
 
     public MainViewModel()
     {
@@ -126,17 +117,15 @@ public sealed class MainViewModel : ReactiveObject
         temp_points = new List<Point>();
 
         // Инициализация команд
-        SelectPenCommand = new RelayCommand(() => SelectTool(ToolType.Pen));
-        SelectPencilCommand = new RelayCommand(() => SelectTool(ToolType.Pencil));
-        SelectBrushCommand = new RelayCommand(() => SelectTool(ToolType.Brush));
-        SelectEraserCommand = new RelayCommand(() => SelectTool(ToolType.Eraser));
 
-        SelectRectangleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Rectangle));
-        SelectTriangleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Triangle));
-        SelectCircleCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Circle));
-        SelectEllipseCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Ellipse));
-        SelectArrowCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Arrow));
-        SelectLineCommand = new RelayCommand(() => SelectPrimitive(PrimitiveType.Line));
+        SelectPrimitiveCommand = ReactiveCommand.Create<PrimitiveType>(arg =>
+        {
+            SelectPrimitive(arg);
+        });
+        SelectToolCommand = ReactiveCommand.Create<ToolType>(arg =>
+        {
+            SelectTool(arg);
+        });
 
         // Реакция на изменение инструмента
         this.WhenAnyValue(x => x.SelectedTool)
@@ -170,18 +159,17 @@ public sealed class MainViewModel : ReactiveObject
             });
     }
 
-    private void SelectTool(ToolType tool)
+    private void SelectTool(ToolType primitive)
     {
-        if (SelectedTool == tool)
+        if (SelectedTool == primitive)
         {
             SelectedTool = ToolType.None;
         }
         else
         {
-            SelectedTool = tool;
+            SelectedTool = primitive;
         }
     }
-
     private void SelectPrimitive(PrimitiveType primitive)
     {
         if (SelectedPrimitive == primitive)

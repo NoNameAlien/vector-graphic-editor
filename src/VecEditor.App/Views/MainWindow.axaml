@@ -54,25 +54,29 @@
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
 								  IsChecked="{Binding IsPenActive}"
-								  Command="{Binding SelectPenCommand}">
+								  Command="{Binding SelectToolCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+ToolType.Pen}">
 						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
 					</ToggleButton>
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
 								  IsChecked="{Binding IsPencilActive}"
-								  Command="{Binding SelectPencilCommand}">
+								  Command="{Binding SelectToolCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+ToolType.Pencil}">
 						<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
 					</ToggleButton>
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
 								  IsChecked="{Binding IsBrushActive}"
-								  Command="{Binding SelectBrushCommand}">
+								  Command="{Binding SelectToolCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+ToolType.Brush}">
 						<Image Source="/Assets/brush.png" Width="32" Height="32"/>
 					</ToggleButton>
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Eraser"
 								  IsChecked="{Binding IsEraserActive}"
-								  Command="{Binding SelectEraserCommand}">
+								  Command="{Binding SelectToolCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+ToolType.Eraser}">
 						<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
 					</ToggleButton>
 				</StackPanel>
@@ -93,7 +97,8 @@
 					<!-- Кнопки для фигур -->
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Rectangle"
 								  IsChecked="{Binding IsRectangleActive}"
-								  Command="{Binding SelectRectangleCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Rectangle}">
 						<Rectangle Width="30" Height="20"
                                    Fill="Transparent"
                                    Stroke="Black"
@@ -103,7 +108,8 @@
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Ellipse"
 								  IsChecked="{Binding IsEllipseActive}"
-								  Command="{Binding SelectEllipseCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Ellipse}">
 						<Ellipse Width="30" Height="20"
                                  Fill="Transparent"
                                  Stroke="Black"
@@ -112,7 +118,8 @@
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Circle"
 								  IsChecked="{Binding IsCircleActive}"
-								  Command="{Binding SelectCircleCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Circle}">
 						<Ellipse Width="25" Height="25"
                                  Fill="Transparent"
                                  Stroke="Black"
@@ -121,7 +128,8 @@
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Triangle"
 								  IsChecked="{Binding IsTriangleActive}"
-								  Command="{Binding SelectTriangleCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Triangle}">
 						<Path Data="M 0,25 L 20,25 L 10,3 Z"
                               Stroke="Black"
                               Fill="Transparent"
@@ -131,13 +139,15 @@
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Line"
 								  IsChecked="{Binding IsLineActive}"
-								  Command="{Binding SelectLineCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Line}">
 						<Image Source="/Assets/line.png" Width="32" Height="32"/>
 					</ToggleButton>
 
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Arrow"
 								  IsChecked="{Binding IsArrowActive}"
-								  Command="{Binding SelectArrowCommand}">
+								  Command="{Binding SelectPrimitiveCommand}"
+								  CommandParameter="{x:Static vm1:MainViewModel+PrimitiveType.Arrow}">
 						<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
 					</ToggleButton>
 				</StackPanel>
