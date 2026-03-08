@@ -4,7 +4,7 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using System.Linq;
-using VecEditor.App.ViewModels;
+using VecEditor.ViewModel;
 using VecEditor.App.Views;
 
 namespace VecEditor.App;
@@ -24,7 +24,7 @@ public partial class App : Application
 
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainViewModel(),
             };
         }
 

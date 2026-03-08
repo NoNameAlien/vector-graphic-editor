@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using VecEditor.App.ViewModels;
+using VecEditor.ViewModel;
 
 namespace VecEditor.App.Views;
 
@@ -13,7 +13,7 @@ public partial class MainWindow : Window
     }
     private void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (this.DataContext is MainWindowViewModel viewModel)
+        if (this.DataContext is MainViewModel viewModel)
         {
             // Получаем координаты относительно Canvas
             var point = e.GetPosition((Visual?)sender);
