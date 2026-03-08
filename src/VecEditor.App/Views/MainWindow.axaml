@@ -32,16 +32,17 @@
 			</MenuItem>
 		</Menu>
 
+
 		<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
-		<UniformGrid Grid.Row="1"
-                     Rows="1"
-                     Columns="3"
-                     Margin="5"
-                     Height="80"
-					 Background="">
+		<Grid Grid.Row="1" Margin="5" Height="80">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
 
 			<!-- Колонка 1: Карандашные инструменты -->
-			<Border BorderBrush="Gray"
+			<Border Grid.Column="0" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -52,13 +53,10 @@
                             VerticalAlignment="Center"
                             Spacing="10">
 
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
-								  IsChecked="{Binding IsPenActive}"
-								  Command="{Binding SelectToolCommand}"
-								  CommandParameter="{x:Static vm1:MainViewModel+ToolType.Pen}">
-						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
-					</ToggleButton>
-
+					<!--// Mode=OneWay
+					// Посмотреть Стили
+					// SVG Библиотек -->
+					<!-- SVG библиотека в телеге -->
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
 								  IsChecked="{Binding IsPencilActive}"
 								  Command="{Binding SelectToolCommand}"
@@ -83,7 +81,7 @@
 			</Border>
 
 			<!-- Колонка 2: Фигуры -->
-			<Border BorderBrush="Gray"
+			<Border Grid.Column="1" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -153,8 +151,8 @@
 				</StackPanel>
 			</Border>
 
-			<!-- Колонка 3: Work In Progress (заглушка) -->
-			<Border BorderBrush="Gray"
+			<!-- Колонка 3: Work In Progress -->
+			<Border Grid.Column="2" BorderBrush="Gray"
                     BorderThickness="1"
                     CornerRadius="3"
                     Margin="2"
@@ -168,7 +166,7 @@
                                Foreground="Gray"/>
 				</StackPanel>
 			</Border>
-		</UniformGrid>
+		</Grid>
 
 		<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
 		<Border Grid.Row="2"
@@ -177,9 +175,8 @@
                 Margin="5"
                 CornerRadius="3"
                 Background="WhiteSmoke">
-				
 
-		<ItemsControl ItemsSource="{Binding primitiveObjects}">
+			<ItemsControl ItemsSource="{Binding primitiveObjects}">
         <!-- Указываем, что рисовать будем на Canvas -->
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
