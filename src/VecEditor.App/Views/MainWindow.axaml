@@ -134,7 +134,6 @@
                               StrokeThickness="2"/>
 					</ToggleButton>
 
-
 					<ToggleButton Width="40" Height="40" ToolTip.Tip="Line"
 								  IsChecked="{Binding IsLineActive}"
 								  Command="{Binding SelectPrimitiveCommand}"
@@ -176,26 +175,43 @@
                 CornerRadius="3"
                 Background="WhiteSmoke">
 
-			<ItemsControl ItemsSource="{Binding primitiveObjects}">
-        <!-- Указываем, что рисовать будем на Canvas -->
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Name="canvas1"
-						Background="Transparent" 
-						PointerPressed="Canvas_PointerPressed"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        
-        <!-- Шаблон отрисовки каждой линии -->
-        <ItemsControl.ItemTemplate >
-            <DataTemplate DataType="vm1:MainViewModel+PrimitiveObject">
-                <Line StartPoint="{Binding ObjectPoints[0]}" 
-                      EndPoint="{Binding ObjectPoints[1]}" 
-                      Stroke="Red" 
-                      StrokeThickness="2"/>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-		</ItemsControl>
+		<ItemsControl ItemsSource="{Binding primitiveObjects}">
+    <!-- 1. Делаем Canvas главной панелью -->
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <Canvas Background="LightGray" 
+					PointerPressed="Canvas_PointerPressed" />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+
+    <!-- 2. Привязываем координаты контейнера к вашему Point -->
+    <ItemsControl.Styles>
+        <Style Selector="ContentPresenter" x:DataType="vm1:MainViewModel+PrimitiveObject">
+            <Setter Property="Canvas.Left" Value="{Binding ObjectPoint.X}"/>
+            <Setter Property="Canvas.Top" Value="{Binding ObjectPoint.Y}"/>
+        </Style>
+    </ItemsControl.Styles>
+
+    <!-- 3. Отрисовка всех фигур сразу с проверкой типа -->
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Panel>
+                <!-- Прямоугольник: виден только если тип Rectangle -->
+                <Rectangle Width="40" Height="40" Fill="Blue" 
+                           IsVisible="{Binding primitiveType, Converter={StaticResource TypeToBool}, ConverterParameter=Rectangle}"/>
+                
+                <!-- Круг: виден только если тип Circle -->
+                <Ellipse Width="40" Height="40" Fill="Red" 
+                         IsVisible="{Binding primitiveType, Converter={StaticResource TypeToBool}, ConverterParameter=Circle}"/>
+                
+                <!-- Линия: от 0,0 до 40,40 относительно точки объекта -->
+                <Line StartPoint="0,0" EndPoint="40,0" Stroke="Black" StrokeThickness="2"
+                      IsVisible="{Binding primitiveType, Converter={StaticResource TypeToBool}, ConverterParameter=Line}"/>
+            </Panel>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
+
 		</Border>
 	</Grid>
 

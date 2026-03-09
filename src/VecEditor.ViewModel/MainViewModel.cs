@@ -33,13 +33,11 @@ public sealed class MainViewModel : ReactiveObject
     public class PrimitiveObject
     {
         public PrimitiveType primitiveType { get; set; }
-        public ToolType toolType { get; set; }
-        public List<Point> ObjectPoints { get; set; }
-        public PrimitiveObject(PrimitiveType pt, ToolType tt, List<Point> pts)
+        public Point ObjectPoint { get; set; }
+        public PrimitiveObject(PrimitiveType ptype, Point pt)
         {
-            primitiveType = pt;
-            toolType = tt;
-            ObjectPoints = pts;
+            primitiveType = ptype;
+            ObjectPoint = pt;
         }
     }
 
@@ -62,25 +60,14 @@ public sealed class MainViewModel : ReactiveObject
         set => field = value;
     }
 
-    public List<Point> temp_points
+    public void add_object(Point tmp)
     {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value.ToList());
-    }
-
-    public void add_point(Point tmp)
-    {
-        if (SelectedPrimitive != PrimitiveType.Line)
+        if (SelectedPrimitive == PrimitiveType.None)
         {
             return;
         }
-        temp_points.Add(tmp);
-        if (temp_points.Count >= 2) // Заменить на количество точек для текущего примитива
-        {
-            PrimitiveObject tmp_obj = new PrimitiveObject(SelectedPrimitive, SelectedTool, temp_points.GetRange(0, 2)); // Заменить на количество точек для текущего примитива
-            primitiveObjects.Add(tmp_obj);
-            temp_points.RemoveRange(0, 2);
-        }
+        PrimitiveObject tmp_obj = new PrimitiveObject(SelectedPrimitive, tmp); // Заменить на количество точек для текущего примитива
+        primitiveObjects.Add(tmp_obj);
     }
 
     // Свойства для UI
@@ -104,8 +91,7 @@ public sealed class MainViewModel : ReactiveObject
 
     // Логические свойства для удобства работы
     public bool IsToolSelected => SelectedTool != ToolType.None;
-    public bool IsDrawingTool => SelectedTool == ToolType.Pen ||
-                                  SelectedTool == ToolType.Pencil ||
+    public bool IsDrawingTool =>  SelectedTool == ToolType.Pencil ||
                                   SelectedTool == ToolType.Brush;
     
 
@@ -114,7 +100,6 @@ public sealed class MainViewModel : ReactiveObject
         SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
         SelectedPrimitive = PrimitiveType.None;
         primitiveObjects = new ObservableCollection<PrimitiveObject>();
-        temp_points = new List<Point>();
 
         // Инициализация команд
 
