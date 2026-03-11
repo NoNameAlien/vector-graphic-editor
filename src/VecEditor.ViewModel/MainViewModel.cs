@@ -97,7 +97,7 @@ public sealed class MainViewModel : ReactiveObject
 
     public MainViewModel()
     {
-        SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
+        //SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
         SelectedPrimitive = PrimitiveType.None;
         primitiveObjects = new ObservableCollection<PrimitiveObject>();
 
@@ -187,7 +187,7 @@ public sealed class MainViewModel : ReactiveObject
         }
     }
 
-    private void HandlePrimitiveChanged(PrimitiveType newPrimitive)
+    public void HandlePrimitiveChanged(PrimitiveType newPrimitive)
     {
         // Здесь логика 
         switch (newPrimitive)
