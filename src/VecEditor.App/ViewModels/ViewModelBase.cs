@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace src.VecEditor.App.ViewModels
+namespace VecEditor.App.ViewModels
 {
     public abstract class ViewModelBase : ObservableObject
     {

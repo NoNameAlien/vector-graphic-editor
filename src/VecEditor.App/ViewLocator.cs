@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using src.VecEditor.App.ViewModels;
 using System;
-using VecEditor.App.ViewModels;
 
 namespace VecEditor.App.ViewModels;
 
