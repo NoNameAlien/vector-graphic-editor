@@ -85,7 +85,7 @@
 					</StackPanel>
 				</Border>
 
-				<!-- Колонка 2: Фигуры (ранее была колонка 2, теперь занимает место колонки 2 в UniformGrid) -->
+				<!-- Колонка 2: Фигуры -->
 				<Border BorderBrush="Gray"
                         BorderThickness="1"
                         CornerRadius="3"
@@ -151,32 +151,38 @@
 
 			<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
 			<Border Grid.Row="2"
-                    BorderBrush="LightGray"
-                    BorderThickness="2"
-                    Margin="5"
-                    CornerRadius="6"
-                    Background="WhiteSmoke">
-
-				<ItemsControl ItemsSource="{Binding primitiveObjects}">
-					<!-- Указываем, что рисовать будем на Canvas -->
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<Canvas Name="canvas1"
-                                    Background="Transparent"
-                                    PointerPressed="Canvas_PointerPressed"/>
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-
-					<!-- Шаблон отрисовки каждой линии -->
-					<ItemsControl.ItemTemplate>
-						<DataTemplate DataType="vm:MainWindowViewModel+PrimitiveObject">
-							<Line StartPoint="{Binding ObjectPoints[0]}"
-                                  EndPoint="{Binding ObjectPoints[1]}"
-                                  Stroke="Red"
-                                  StrokeThickness="2"/>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
+			        BorderBrush="LightGray"
+			        BorderThickness="2"
+			        Margin="5"
+			        CornerRadius="6"
+			        Background="WhiteSmoke"
+			        HorizontalAlignment="Center"
+			        VerticalAlignment="Center">
+			    
+			    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+			                  VerticalScrollBarVisibility="Auto">
+			        <ItemsControl ItemsSource="{Binding primitiveObjects}">
+			            <ItemsControl.ItemsPanel>
+			                <ItemsPanelTemplate>
+			                    <Canvas Name="canvas1"
+			                            Width="1200"
+			                            Height="800"
+			                            Background="White"
+			                            PointerPressed="Canvas_PointerPressed"/>
+			                </ItemsPanelTemplate>
+			            </ItemsControl.ItemsPanel>
+			
+			            <!-- Шаблон отрисовки -->
+			            <ItemsControl.ItemTemplate>
+			                <DataTemplate>
+			                    <Line StartPoint="{Binding ObjectPoints[0]}"
+			                          EndPoint="{Binding ObjectPoints[1]}"
+			                          Stroke="Red"
+			                          StrokeThickness="2"/>
+			                </DataTemplate>
+			            </ItemsControl.ItemTemplate>
+			        </ItemsControl>
+			    </ScrollViewer>
 			</Border>
 		</Grid>
 
@@ -256,7 +262,7 @@
 				<!-- Цвет заливки -->
 				<StackPanel Grid.Row="4" Margin="0,0,0,10">
 					<TextBlock Text="Цвет заливки:"
-							   FontWeight="SemiBold"
+							   FontWeight="SemiBold"	
 							   Margin="0,0,0,3"
 							   Foreground="Black"/>
 					<Grid ColumnDefinitions="Auto,*">
