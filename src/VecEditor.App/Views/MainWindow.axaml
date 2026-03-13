@@ -7,187 +7,294 @@
         x:Class="VecEditor.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="VecEditor">
+        Title="VecEditor"
+		MinWidth="900"
+        MinHeight="600">
 
-	<Grid RowDefinitions="Auto,Auto,*">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="250"/>
+		</Grid.ColumnDefinitions>
 
-		<!-- СТРОКА МЕНЮ (первая строка) -->
-		<Menu Grid.Row="0" Margin="5">
-			<MenuItem Header="_File">
-				<MenuItem Header="_New"/>
-				<MenuItem Header="_Open"/>
-				<MenuItem Header="_Save"/>
-				<Separator/>
-				<MenuItem Header="E_xit"/>
-			</MenuItem>
-			<MenuItem Header="_Edit">
-				<MenuItem Header="_Undo"/>
-				<MenuItem Header="_Redo"/>
-			</MenuItem>
-			<MenuItem Header="_View">
-				<MenuItem Header="Zoom In"/>
-				<MenuItem Header="Zoom Out"/>
-			</MenuItem>
-		</Menu>
+		<!-- Левая колонка с основным интерфейсом -->
+		<Grid Grid.Column="0" RowDefinitions="Auto,Auto,*">
 
-		<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
-		<UniformGrid Grid.Row="1"
-                     Rows="1"
-                     Columns="3"
-                     Margin="5"
-                     Height="80"
-					 Background="">
+			<!-- СТРОКА МЕНЮ (первая строка) -->
+			<Menu Grid.Row="0" Margin="5">
+				<MenuItem Header="_File">
+					<MenuItem Header="_New"/>
+					<MenuItem Header="_Open"/>
+					<MenuItem Header="_Save"/>
+					<Separator/>
+					<MenuItem Header="E_xit"/>
+				</MenuItem>
+				<MenuItem Header="_Edit">
+					<MenuItem Header="_Undo"/>
+					<MenuItem Header="_Redo"/>
+				</MenuItem>
+				<MenuItem Header="_View">
+					<MenuItem Header="Zoom In"/>
+					<MenuItem Header="Zoom Out"/>
+				</MenuItem>
+			</Menu>
 
-			<!-- Колонка 1: Карандашные инструменты -->
-			<Border BorderBrush="Gray"
-                    BorderThickness="1"
-                    CornerRadius="3"
-                    Margin="2"
-                    Padding="5"
-					Background="Gray">
-				<StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Spacing="10">
+			<!-- ПАНЕЛЬ ИНСТРУМЕНТОВ (вторая строка) -->
+			<UniformGrid Grid.Row="1"
+                         Rows="1"
+                         Columns="2"
+                         Margin="5"
+                         Height="80"
+                         Background="">
 
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
-								  IsChecked="{Binding IsPenActive}"
-								  Command="{Binding SelectPenCommand}">
-						<Image Source="/Assets/pen.png" Width="32" Height="32"/>
-					</ToggleButton>
+				<!-- Колонка 1: Карандашные инструменты -->
+				<Border BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Margin="2"
+                        Padding="5"
+                        Background="Gray">
+					<StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Spacing="10">
 
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
-								  IsChecked="{Binding IsPencilActive}"
-								  Command="{Binding SelectPencilCommand}">
-						<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
-					</ToggleButton>
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
+                                      IsChecked="{Binding IsPenActive}"
+                                      Command="{Binding SelectPenCommand}">
+							<Image Source="/Assets/pen.png" Width="32" Height="32"/>
+						</ToggleButton>
 
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
-								  IsChecked="{Binding IsBrushActive}"
-								  Command="{Binding SelectBrushCommand}">
-						<Image Source="/Assets/brush.png" Width="32" Height="32"/>
-					</ToggleButton>
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Pencil"
+                                      IsChecked="{Binding IsPencilActive}"
+                                      Command="{Binding SelectPencilCommand}">
+							<Image Source="/Assets/pencil.png" Width="32" Height="32"/>
+						</ToggleButton>
 
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Eraser"
-								  IsChecked="{Binding IsEraserActive}"
-								  Command="{Binding SelectEraserCommand}">
-						<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
-					</ToggleButton>
-				</StackPanel>
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Brush"
+                                      IsChecked="{Binding IsBrushActive}"
+                                      Command="{Binding SelectBrushCommand}">
+							<Image Source="/Assets/brush.png" Width="32" Height="32"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Eraser"
+                                      IsChecked="{Binding IsEraserActive}"
+                                      Command="{Binding SelectEraserCommand}">
+							<Image Source="/Assets/eraser.png" Width="32" Height="32"/>
+						</ToggleButton>
+					</StackPanel>
+				</Border>
+
+				<!-- Колонка 2: Фигуры -->
+				<Border BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Margin="2"
+                        Padding="5"
+                        Background="Gray">
+					<StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Spacing="10">
+
+						<!-- Кнопки для фигур -->
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Rectangle"
+                                      IsChecked="{Binding IsRectangleActive}"
+                                      Command="{Binding SelectRectangleCommand}">
+							<Rectangle Width="30" Height="20"
+                                       Fill="Transparent"
+                                       Stroke="Black"
+                                       StrokeThickness="2"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Ellipse"
+                                      IsChecked="{Binding IsEllipseActive}"
+                                      Command="{Binding SelectEllipseCommand}">
+							<Ellipse Width="30" Height="20"
+                                     Fill="Transparent"
+                                     Stroke="Black"
+                                     StrokeThickness="2"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Circle"
+                                      IsChecked="{Binding IsCircleActive}"
+                                      Command="{Binding SelectCircleCommand}">
+							<Ellipse Width="25" Height="25"
+                                     Fill="Transparent"
+                                     Stroke="Black"
+                                     StrokeThickness="2"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Triangle"
+                                      IsChecked="{Binding IsTriangleActive}"
+                                      Command="{Binding SelectTriangleCommand}">
+							<Path Data="M 0,25 L 20,25 L 10,3 Z"
+                                  Stroke="Black"
+                                  Fill="Transparent"
+                                  StrokeThickness="2"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Line"
+                                      IsChecked="{Binding IsLineActive}"
+                                      Command="{Binding SelectLineCommand}">
+							<Image Source="/Assets/line.png" Width="32" Height="32"/>
+						</ToggleButton>
+
+						<ToggleButton Width="40" Height="40" ToolTip.Tip="Arrow"
+                                      IsChecked="{Binding IsArrowActive}"
+                                      Command="{Binding SelectArrowCommand}">
+							<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
+						</ToggleButton>
+					</StackPanel>
+				</Border>
+			</UniformGrid>
+
+			<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
+			<Border Grid.Row="2"
+			        BorderBrush="LightGray"
+			        BorderThickness="2"
+			        Margin="5"
+			        CornerRadius="6"
+			        Background="WhiteSmoke"
+			        HorizontalAlignment="Center"
+			        VerticalAlignment="Center">
+			    
+			    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+			                  VerticalScrollBarVisibility="Auto">
+			        <ItemsControl ItemsSource="{Binding primitiveObjects}">
+			            <ItemsControl.ItemsPanel>
+			                <ItemsPanelTemplate>
+			                    <Canvas Name="canvas1"
+			                            Width="1200"
+			                            Height="800"
+			                            Background="White"
+			                            PointerPressed="Canvas_PointerPressed"/>
+			                </ItemsPanelTemplate>
+			            </ItemsControl.ItemsPanel>
+			
+			            <!-- Шаблон отрисовки -->
+			            <ItemsControl.ItemTemplate>
+			                <DataTemplate>
+			                    <Line StartPoint="{Binding ObjectPoints[0]}"
+			                          EndPoint="{Binding ObjectPoints[1]}"
+			                          Stroke="Red"
+			                          StrokeThickness="2"/>
+			                </DataTemplate>
+			            </ItemsControl.ItemTemplate>
+			        </ItemsControl>
+			    </ScrollViewer>
 			</Border>
+		</Grid>
 
-			<!-- Колонка 2: Фигуры -->
-			<Border BorderBrush="Gray"
-                    BorderThickness="1"
-                    CornerRadius="3"
-                    Margin="2"
-                    Padding="5"
-					Background="Gray">
-				<StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Spacing="10">
+		<!-- Правая колонка: Панель свойств -->
+		<Border Grid.Column="1"
+				BorderBrush="DarkGray"
+				BorderThickness="1,0,0,0"
+				Background="#F5F5F5"
+				Margin="0,5,5,5"
+				CornerRadius="0,3,3,0">
 
-					<!-- Кнопки для фигур -->
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Rectangle"
-								  IsChecked="{Binding IsRectangleActive}"
-								  Command="{Binding SelectRectangleCommand}">
-						<Rectangle Width="30" Height="20"
-                                   Fill="Transparent"
-                                   Stroke="Black"
-                                   StrokeThickness="2"/>
+			<Grid Margin="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*">
+				<!-- Заголовок панели -->
+				<TextBlock Grid.Row="0"
+						   Text="Свойства фигуры"
+						   FontSize="16"
+						   FontWeight="Bold"
+						   Margin="0,0,0,15"
+						   HorizontalAlignment="Center"
+						   Foreground="Black"/>
 
-					</ToggleButton>
-
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Ellipse"
-								  IsChecked="{Binding IsEllipseActive}"
-								  Command="{Binding SelectEllipseCommand}">
-						<Ellipse Width="30" Height="20"
-                                 Fill="Transparent"
-                                 Stroke="Black"
-                                 StrokeThickness="2"/>
-					</ToggleButton>
-
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Circle"
-								  IsChecked="{Binding IsCircleActive}"
-								  Command="{Binding SelectCircleCommand}">
-						<Ellipse Width="25" Height="25"
-                                 Fill="Transparent"
-                                 Stroke="Black"
-                                 StrokeThickness="2"/>
-					</ToggleButton>
-
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Triangle"
-								  IsChecked="{Binding IsTriangleActive}"
-								  Command="{Binding SelectTriangleCommand}">
-						<Path Data="M 0,25 L 20,25 L 10,3 Z"
-                              Stroke="Black"
-                              Fill="Transparent"
-                              StrokeThickness="2"/>
-					</ToggleButton>
-
-
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Line"
-								  IsChecked="{Binding IsLineActive}"
-								  Command="{Binding SelectLineCommand}">
-						<Image Source="/Assets/line.png" Width="32" Height="32"/>
-					</ToggleButton>
-
-					<ToggleButton Width="40" Height="40" ToolTip.Tip="Arrow"
-								  IsChecked="{Binding IsArrowActive}"
-								  Command="{Binding SelectArrowCommand}">
-						<Image Source="/Assets/arrow.png" Width="32" Height="32"/>
-					</ToggleButton>
+				<!-- Тип фигуры -->
+				<StackPanel Grid.Row="1" Margin="0,0,0,10">
+					<TextBlock Text="Тип:"
+							   FontWeight="SemiBold"
+							   Margin="0,0,0,3"
+							   Foreground="Black"/>
+					<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+						<TextBlock Text="Прямоугольник" Foreground="Black"/>
+					</Border>
 				</StackPanel>
-			</Border>
 
-			<!-- Колонка 3: Work In Progress (заглушка) -->
-			<Border BorderBrush="Gray"
-                    BorderThickness="1"
-                    CornerRadius="3"
-                    Margin="2"
-                    Padding="5"
-                    Background="">
-				<StackPanel HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-					<TextBlock Text="🚧 Work In Progress 🚧"
-                               FontSize="14"
-                               FontWeight="Bold"
-                               Foreground="Gray"/>
+				<!-- Позиция X, Y -->
+				<Grid Grid.Row="2" Margin="0,0,0,10" ColumnDefinitions="*,*">
+					<StackPanel Grid.Column="0" Margin="0,0,5,0">
+						<TextBlock Text="X:"
+								   FontWeight="SemiBold"
+								   Margin="0,0,0,3"
+								   Foreground="Black"/>
+						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+							<TextBlock Text="120" Foreground="Black"/>
+						</Border>
+					</StackPanel>
+					<StackPanel Grid.Column="1" Margin="5,0,0,0">
+						<TextBlock Text="Y:"
+								   FontWeight="SemiBold"
+								   Margin="0,0,0,3"
+								   Foreground="Black"/>
+						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+							<TextBlock Text="85" Foreground="Black"/>
+						</Border>
+					</StackPanel>
+				</Grid>
+
+				<!-- Размеры Width, Height -->
+				<Grid Grid.Row="3" Margin="0,0,0,10" ColumnDefinitions="*,*">
+					<StackPanel Grid.Column="0" Margin="0,0,5,0">
+						<TextBlock Text="Ширина:"
+								   FontWeight="SemiBold"
+								   Margin="0,0,0,3"
+								   Foreground="Black"/>
+						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+							<TextBlock Text="200" Foreground="Black"/>
+						</Border>
+					</StackPanel>
+					<StackPanel Grid.Column="1" Margin="5,0,0,0">
+						<TextBlock Text="Высота:"
+								   FontWeight="SemiBold"
+								   Margin="0,0,0,3"
+								   Foreground="Black"/>
+						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+							<TextBlock Text="150" Foreground="Black"/>
+						</Border>
+					</StackPanel>
+				</Grid>
+
+				<!-- Цвет заливки -->
+				<StackPanel Grid.Row="4" Margin="0,0,0,10">
+					<TextBlock Text="Цвет заливки:"
+							   FontWeight="SemiBold"	
+							   Margin="0,0,0,3"
+							   Foreground="Black"/>
+					<Grid ColumnDefinitions="Auto,*">
+						<Border Grid.Column="0" Width="30" Height="30" Background="LightBlue" BorderBrush="Gray" BorderThickness="1" CornerRadius="2" Margin="0,0,5,0"/>
+						<Border Grid.Column="1" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+							<TextBlock Text="LightBlue" Foreground="Black"/>
+						</Border>
+					</Grid>
 				</StackPanel>
-			</Border>
-		</UniformGrid>
 
-		<!-- РАБОЧАЯ ОБЛАСТЬ (третья строка) -->
-		<Border Grid.Row="2"
-                BorderBrush="LightGray"
-                BorderThickness="2"
-                Margin="5"
-                CornerRadius="3"
-                Background="WhiteSmoke">
-				
+				<!-- Толщина обводки -->
+				<StackPanel Grid.Row="5" Margin="0,0,0,10">
+					<TextBlock Text="Толщина обводки:"
+							   FontWeight="SemiBold"
+							   Margin="0,0,0,3"
+							   Foreground="Black"/>
+					<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
+						<TextBlock Text="2 px" Foreground="Black"/>
+					</Border>
+				</StackPanel>
 
-		<ItemsControl ItemsSource="{Binding primitiveObjects}">
-        <!-- Указываем, что рисовать будем на Canvas -->
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Name="canvas1"
-						Background="Transparent" 
-						PointerPressed="Canvas_PointerPressed"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        
-        <!-- Шаблон отрисовки каждой линии -->
-        <ItemsControl.ItemTemplate >
-            <DataTemplate DataType="vm:MainWindowViewModel+PrimitiveObject">
-                <Line StartPoint="{Binding ObjectPoints[0]}" 
-                      EndPoint="{Binding ObjectPoints[1]}" 
-                      Stroke="Red" 
-                      StrokeThickness="2"/>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-		</ItemsControl>
+				<!-- Дополнительная информация  -->
+				<StackPanel Grid.Row="6" Margin="0,10,0,0">
+					<Border Background="#E0E0E0" BorderThickness="0" CornerRadius="2" Padding="8,5">
+						<TextBlock Text="Свойства будут отображаться здесь. Здесь можно будет их редактировать. На данный момент не функциональна."
+								   Foreground="#333333"
+								   FontSize="11"
+								   TextWrapping="Wrap"
+								   HorizontalAlignment="Center"/>
+					</Border>
+				</StackPanel>
+			</Grid>
 		</Border>
 	</Grid>
-
 </Window>
