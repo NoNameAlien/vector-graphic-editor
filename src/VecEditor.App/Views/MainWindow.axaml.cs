@@ -18,7 +18,15 @@ public partial class MainWindow : Window
         if (DataContext is MainWindowViewModel viewModel)
         {
             var point = e.GetPosition((Visual?)sender);
-            viewModel.AddPoint(point);
+
+            if (viewModel.SelectedTool == MainWindowViewModel.ToolType.Pointer)
+            {
+                viewModel.SelectObjectAt(point);
+            }
+            else
+            {
+                viewModel.AddPoint(point);
+            }
         }
     }
 
@@ -28,6 +36,16 @@ public partial class MainWindow : Window
         {
             var point = e.GetPosition((Visual?)sender);
             viewModel.UpdatePreview(point);
+        }
+    }
+
+    private void StrokeThicknessTextBox_GotFocus(object? sender, GotFocusEventArgs e)
+    {
+        if (sender is TextBox textBox)
+        {
+            textBox.CaretIndex = textBox.Text?.Length ?? 0;
+            textBox.SelectionStart = textBox.CaretIndex;
+            textBox.SelectionEnd = textBox.CaretIndex;
         }
     }
 }

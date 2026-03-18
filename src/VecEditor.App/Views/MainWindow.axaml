@@ -14,6 +14,7 @@
 
   <Window.Resources>
     <conv:Point2ToAvaloniaPointConverter x:Key="Point2Converter" />
+    <conv:StringToBrushConverter x:Key="StringToBrushConverter" />
   </Window.Resources>
 
 	<Grid>
@@ -63,6 +64,17 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Spacing="10">
+            
+            <ToggleButton Width="40"
+                          Height="40"
+                          ToolTip.Tip="Pointer"
+                          IsChecked="{Binding IsPointerActive}"
+                          Command="{Binding SelectPointerCommand}">
+                <TextBlock Text="🖐"
+                           FontSize="18"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </ToggleButton>
 
 						<ToggleButton Width="40" Height="40" ToolTip.Tip="Pen"
                                       IsChecked="{Binding IsPenActive}"
@@ -185,12 +197,23 @@
               </ItemsControl.ItemsPanel>
 
               <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Line StartPoint="{Binding ObjectPoints[0], Converter={StaticResource Point2Converter}}"
-                        EndPoint="{Binding ObjectPoints[1], Converter={StaticResource Point2Converter}}"
-                        Stroke="Red"
-                        StrokeThickness="2"/>
-                </DataTemplate>
+                  <DataTemplate>
+                      <Canvas>
+                          <Rectangle Canvas.Left="{Binding BoundsX}"
+                                     Canvas.Top="{Binding BoundsY}"
+                                     Width="{Binding BoundsWidth}"
+                                     Height="{Binding BoundsHeight}"
+                                     Stroke="DodgerBlue"
+                                     StrokeThickness="1"
+                                     StrokeDashArray="4,2"
+                                     IsVisible="{Binding IsSelected}"/>
+
+                          <Line StartPoint="{Binding ObjectPoints[0], Converter={StaticResource Point2Converter}}"
+                                EndPoint="{Binding ObjectPoints[1], Converter={StaticResource Point2Converter}}"
+                                Stroke="{Binding StrokeColor}"
+                                StrokeThickness="{Binding StrokeThickness}"/>
+                      </Canvas>
+                  </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
 
@@ -230,7 +253,7 @@
 							   Margin="0,0,0,3"
 							   Foreground="Black"/>
 					<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-						<TextBlock Text="Прямоугольник" Foreground="Black"/>
+						<TextBlock Text="{Binding CurrentFigureTypeText}" Foreground="Black"/>
 					</Border>
 				</StackPanel>
 
@@ -242,7 +265,7 @@
 								   Margin="0,0,0,3"
 								   Foreground="Black"/>
 						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-							<TextBlock Text="120" Foreground="Black"/>
+							<TextBlock Text="{Binding CurrentXText}" Foreground="Black"/>
 						</Border>
 					</StackPanel>
 					<StackPanel Grid.Column="1" Margin="5,0,0,0">
@@ -251,7 +274,7 @@
 								   Margin="0,0,0,3"
 								   Foreground="Black"/>
 						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-							<TextBlock Text="85" Foreground="Black"/>
+							<TextBlock Text="{Binding CurrentYText}" Foreground="Black"/>
 						</Border>
 					</StackPanel>
 				</Grid>
@@ -264,7 +287,7 @@
 								   Margin="0,0,0,3"
 								   Foreground="Black"/>
 						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-							<TextBlock Text="200" Foreground="Black"/>
+							<TextBlock Text="{Binding CurrentWidthText}" Foreground="Black"/>
 						</Border>
 					</StackPanel>
 					<StackPanel Grid.Column="1" Margin="5,0,0,0">
@@ -273,40 +296,65 @@
 								   Margin="0,0,0,3"
 								   Foreground="Black"/>
 						<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-							<TextBlock Text="150" Foreground="Black"/>
+							<TextBlock Text="{Binding CurrentHeightText}" Foreground="Black"/>
 						</Border>
 					</StackPanel>
 				</Grid>
 
 				<!-- Цвет заливки -->
 				<StackPanel Grid.Row="4" Margin="0,0,0,10">
-					<TextBlock Text="Цвет заливки:"
-							   FontWeight="SemiBold"	
-							   Margin="0,0,0,3"
-							   Foreground="Black"/>
-					<Grid ColumnDefinitions="Auto,*">
-						<Border Grid.Column="0" Width="30" Height="30" Background="LightBlue" BorderBrush="Gray" BorderThickness="1" CornerRadius="2" Margin="0,0,5,0"/>
-						<Border Grid.Column="1" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-							<TextBlock Text="LightBlue" Foreground="Black"/>
-						</Border>
-					</Grid>
-				</StackPanel>
+            <TextBlock Text="Цвет заливки:"
+                        FontWeight="SemiBold"
+                        Margin="0,0,0,3"
+                        Foreground="Black"/>
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0"
+                        Width="30"
+                        Height="30"
+                        Background="{Binding SelectedStrokeColor, Converter={StaticResource StringToBrushConverter}}"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Margin="0,0,5,0"/>
+
+                <Border Grid.Column="1"
+                        Background="White"
+                        BorderBrush="LightGray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Padding="4,2">
+                    <ComboBox ItemsSource="{Binding AvailableStrokeColors}"
+                              SelectedItem="{Binding SelectedStrokeColor}"
+                              Background="White"
+                              BorderThickness="0"
+                              Foreground="Black"/>
+                </Border>
+            </Grid>
+        </StackPanel>
 
 				<!-- Толщина обводки -->
 				<StackPanel Grid.Row="5" Margin="0,0,0,10">
-					<TextBlock Text="Толщина обводки:"
-							   FontWeight="SemiBold"
-							   Margin="0,0,0,3"
-							   Foreground="Black"/>
-					<Border Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Padding="8,5">
-						<TextBlock Text="2 px" Foreground="Black"/>
-					</Border>
-				</StackPanel>
+            <TextBlock Text="Толщина обводки:"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,3"
+                       Foreground="Black"/>
+            <Border Background="White"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="2"
+                    Padding="4,2">
+                <ComboBox ItemsSource="{Binding AvailableStrokeThicknesses}"
+                          SelectedItem="{Binding SelectedStrokeThicknessDisplay}"
+                          Background="White"
+                          BorderThickness="0"
+                          Foreground="Black"/>
+            </Border>
+        </StackPanel>
 
 				<!-- Дополнительная информация  -->
 				<StackPanel Grid.Row="6" Margin="0,10,0,0">
 					<Border Background="#E0E0E0" BorderThickness="0" CornerRadius="2" Padding="8,5">
-						<TextBlock Text="Свойства будут отображаться здесь. Здесь можно будет их редактировать. На данный момент не функциональна."
+						<TextBlock Text="Дальнейшие свойства в разработке."
 								   Foreground="#333333"
 								   FontSize="11"
 								   TextWrapping="Wrap"
