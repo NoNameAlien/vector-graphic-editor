@@ -1,18 +1,16 @@
 using Newtonsoft.Json;
 
-namespace VecEditor.IO.Project;
+namespace VecEditor.IO;
 
-public class JsonProjectSerializer : IProjectSerializer
+public sealed class JsonProjectSerializer
 {
-    private readonly JsonSerializerSettings _settings = new()
+    public string Serialize(ProjectDocument document)
     {
-        TypeNameHandling = TypeNameHandling.Auto,
-        Formatting = Formatting.Indented
-    };
+        return JsonConvert.SerializeObject(document, Formatting.Indented);
+    }
 
-    public string Serialize(object project)
-        => JsonConvert.SerializeObject(project, _settings);
-
-    public T Deserialize<T>(string json)
-        => JsonConvert.DeserializeObject<T>(json, _settings)!;
+    public ProjectDocument Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject<ProjectDocument>(json) ?? new ProjectDocument();
+    }
 }

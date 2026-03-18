@@ -22,5 +22,5 @@ public sealed class LineFigure : IFigure
         B = b;
     }
 
-    public IFigure Clone() => throw new NotImplementedException();
+    public IFigure Clone() => new LineFigure(A, B);
 }

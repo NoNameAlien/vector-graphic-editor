@@ -1,9 +1,7 @@
 using Avalonia;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData.Binding;
 using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Windows.Input;
 
 namespace VecEditor.App.ViewModels;
@@ -31,20 +29,6 @@ public partial class MainWindowViewModel : ReactiveObject
         Line
     }
 
-    // Контейнер для примитива
-    public class PrimitiveObject
-    {
-        public PrimitiveType primitiveType { get; set; }
-        public ToolType toolType { get; set; }
-        public List<Point> ObjectPoints { get; set; }
-        public PrimitiveObject(PrimitiveType pt, ToolType tt, List<Point> pts)
-        {
-            primitiveType = pt;
-            toolType = tt;
-            ObjectPoints = pts;
-        }
-    }
-
     public ToolType SelectedTool
     {
         get => field;
@@ -58,33 +42,58 @@ public partial class MainWindowViewModel : ReactiveObject
     }
 
     // Список примитивов
-    public ObservableCollection<PrimitiveObject> primitiveObjects
-    {
-        get => field;
-        set => field = value;
-    }
+    public VecEditor.ViewModel.EditorState EditorState { get; } = new();
+    public VecEditor.ViewModel.EditorObjectsState ObjectsState { get; } = new();
+    public ObservableCollection<VecEditor.ViewModel.PrimitiveObjectState> PrimitiveObjects
+        => ObjectsState.PrimitiveObjects;
 
-    public List<Point> temp_points
-    {
-        get => field;
-        set => this.RaiseAndSetIfChanged(ref field, value.ToList());
-    }
+    private readonly List<Point> _tempPoints = new();
 
-    public void add_point(Point tmp)
+    public void AddPoint(Point point)
     {
-        if (SelectedPrimitive != PrimitiveType.Line)
+        if (SelectedPrimitive != PrimitiveType.Line && SelectedPrimitive != PrimitiveType.Rectangle)
+            return;
+
+        if (!IsDrawing)
         {
+            _tempPoints.Clear();
+            _tempPoints.Add(point);
+
+            PreviewStartPoint = point;
+            PreviewEndPoint = point;
+            IsDrawing = true;
             return;
         }
-        temp_points.Add(tmp);
-        if (temp_points.Count >= 2) // Заменить на количество точек для текущего примитива
+
+        _tempPoints.Add(point);
+
+        var primitive = new VecEditor.ViewModel.PrimitiveObjectState
         {
-            PrimitiveObject tmp_obj = new PrimitiveObject(SelectedPrimitive, SelectedTool, temp_points.GetRange(0, 2)); // Заменить на количество точек для текущего примитива
-            primitiveObjects.Add(tmp_obj);
-            temp_points.RemoveRange(0, 2);
-        }
+            PrimitiveType = SelectedPrimitive.ToString(),
+            ToolType = SelectedTool.ToString(),
+            ObjectPoints = _tempPoints
+                .Take(2)
+                .Select(p => new VecEditor.Core.Geometry.Point2(p.X, p.Y))
+                .ToList()
+        };
+
+        PrimitiveObjects.Add(primitive);
+
+        _tempPoints.Clear();
+        PreviewStartPoint = null;
+        PreviewEndPoint = null;
+        IsDrawing = false;
     }
-    
+
+    public void UpdatePreview(Point point)
+    {
+        if (!IsDrawing || _tempPoints.Count == 0)
+            return;
+
+        PreviewStartPoint = _tempPoints[0];
+        PreviewEndPoint = point;
+    }
+
     // Свойства для UI
     public bool IsPenActive => SelectedTool == ToolType.Pen;
     public bool IsPencilActive => SelectedTool == ToolType.Pencil;
@@ -98,7 +107,23 @@ public partial class MainWindowViewModel : ReactiveObject
     public bool IsArrowActive => SelectedPrimitive == PrimitiveType.Arrow;
     public bool IsLineActive => SelectedPrimitive == PrimitiveType.Line;
 
-    public System.Drawing.Point Start, End;
+    public bool IsDrawing
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public Point? PreviewStartPoint
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public Point? PreviewEndPoint
+    {
+        get => field;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
 
     // Команды для каждой кнопки
     public ICommand SelectPenCommand { get; }
@@ -123,8 +148,6 @@ public partial class MainWindowViewModel : ReactiveObject
     {
         SelectedTool = ToolType.None; // Ничего не выбрано по умолчанию
         SelectedPrimitive = PrimitiveType.None;
-        primitiveObjects = new ObservableCollection<PrimitiveObject>();
-        temp_points = new List<Point>();
 
         // Инициализация команд
         SelectPenCommand = new RelayCommand(() => SelectTool(ToolType.Pen));

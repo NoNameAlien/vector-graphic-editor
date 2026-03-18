@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:VecEditor.App.ViewModels"
+        xmlns:conv="using:VecEditor.App.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,6 +11,10 @@
         Title="VecEditor"
 		MinWidth="900"
         MinHeight="600">
+
+  <Window.Resources>
+    <conv:Point2ToAvaloniaPointConverter x:Key="Point2Converter" />
+  </Window.Resources>
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -158,31 +163,45 @@
 			        Background="WhiteSmoke"
 			        HorizontalAlignment="Center"
 			        VerticalAlignment="Center">
-			    
-			    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-			                  VerticalScrollBarVisibility="Auto">
-			        <ItemsControl ItemsSource="{Binding primitiveObjects}">
-			            <ItemsControl.ItemsPanel>
-			                <ItemsPanelTemplate>
-			                    <Canvas Name="canvas1"
-			                            Width="1200"
-			                            Height="800"
-			                            Background="White"
-			                            PointerPressed="Canvas_PointerPressed"/>
-			                </ItemsPanelTemplate>
-			            </ItemsControl.ItemsPanel>
-			
-			            <!-- Шаблон отрисовки -->
-			            <ItemsControl.ItemTemplate>
-			                <DataTemplate>
-			                    <Line StartPoint="{Binding ObjectPoints[0]}"
-			                          EndPoint="{Binding ObjectPoints[1]}"
-			                          Stroke="Red"
-			                          StrokeThickness="2"/>
-			                </DataTemplate>
-			            </ItemsControl.ItemTemplate>
-			        </ItemsControl>
-			    </ScrollViewer>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+          <Grid Width="1200" Height="800">
+            <Canvas Name="canvas1"
+                    Width="1200"
+                    Height="800"
+                    Background="White"
+                    PointerPressed="Canvas_PointerPressed"
+                    PointerMoved="Canvas_PointerMoved"/>
+
+            <ItemsControl ItemsSource="{Binding PrimitiveObjects}"
+                          Width="1200"
+                          Height="800"
+                          IsHitTestVisible="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <Canvas Width="1200" Height="800"/>
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Line StartPoint="{Binding ObjectPoints[0], Converter={StaticResource Point2Converter}}"
+                        EndPoint="{Binding ObjectPoints[1], Converter={StaticResource Point2Converter}}"
+                        Stroke="Red"
+                        StrokeThickness="2"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Line StartPoint="{Binding PreviewStartPoint}"
+                  EndPoint="{Binding PreviewEndPoint}"
+                  Stroke="Gray"
+                  StrokeThickness="1"
+                  IsVisible="{Binding IsDrawing}"
+                  IsHitTestVisible="False"/>
+          </Grid>
+        </ScrollViewer>
 			</Border>
 		</Grid>
 
