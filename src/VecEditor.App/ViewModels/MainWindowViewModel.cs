@@ -27,7 +27,8 @@ public partial class MainWindowViewModel : ReactiveObject
         Line
     }
 
-    public EditorObjectsState ObjectsState { get; } = new();
+    private HistoryManager historyManager = new HistoryManager();
+    public EditorObjectsState ObjectsState { get; set; } = new();
 
     public ObservableCollection<PrimitiveObjectState> PrimitiveObjects
         => ObjectsState.PrimitiveObjects;
@@ -103,5 +104,8 @@ public partial class MainWindowViewModel : ReactiveObject
         SelectEllipseCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => SelectPrimitive(PrimitiveType.Ellipse));
         SelectArrowCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => SelectPrimitive(PrimitiveType.Arrow));
         SelectLineCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => SelectPrimitive(PrimitiveType.Line));
+
+        UndoCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => Undo());
+        RedoCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => Redo());
     }
 }

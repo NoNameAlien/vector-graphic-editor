@@ -36,8 +36,8 @@
 					<MenuItem Header="E_xit"/>
 				</MenuItem>
 				<MenuItem Header="_Edit">
-					<MenuItem Header="_Undo"/>
-					<MenuItem Header="_Redo"/>
+					<MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
+					<MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
 				</MenuItem>
 				<MenuItem Header="_View">
 					<MenuItem Header="Zoom In"/>

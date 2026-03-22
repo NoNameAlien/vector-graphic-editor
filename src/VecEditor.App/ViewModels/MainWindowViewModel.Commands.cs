@@ -19,6 +19,9 @@ public partial class MainWindowViewModel
     public ICommand SelectArrowCommand { get; }
     public ICommand SelectLineCommand { get; }
 
+    public ICommand UndoCommand { get; }
+    public ICommand RedoCommand { get; }
+
     private void SelectTool(ToolType tool)
     {
         if (SelectedTool == tool)
