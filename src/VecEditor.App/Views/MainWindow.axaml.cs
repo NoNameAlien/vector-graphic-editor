@@ -23,6 +23,10 @@ public partial class MainWindow : Window
             {
                 viewModel.SelectObjectAt(point);
             }
+            else if (viewModel.SelectedTool == MainWindowViewModel.ToolType.Eraser)
+            {
+                viewModel.DeleteObjectAt(point);
+            }
             else
             {
                 viewModel.AddPoint(point);

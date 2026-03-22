@@ -42,7 +42,7 @@ public partial class MainWindowViewModel
 
     public void AddPoint(Point point)
     {
-        if (SelectedPrimitive != PrimitiveType.Line && SelectedPrimitive != PrimitiveType.Rectangle)
+        if (SelectedPrimitive == PrimitiveType.None)
             return;
 
         if (!IsDrawing)
