@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VecEditor.Core\VecEditor.Core.csproj" />
+    <ProjectReference Include="..\VecEditor.IO\VecEditor.IO.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

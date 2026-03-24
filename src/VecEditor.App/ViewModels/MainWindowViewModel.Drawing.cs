@@ -42,7 +42,7 @@ public partial class MainWindowViewModel
 
     public void AddPoint(Point point)
     {
-        if (SelectedPrimitive != PrimitiveType.Line && SelectedPrimitive != PrimitiveType.Rectangle)
+        if (SelectedPrimitive == PrimitiveType.None)
             return;
 
         if (!IsDrawing)
@@ -59,23 +59,23 @@ public partial class MainWindowViewModel
         _tempPoints.Add(point);
 
         var primitive = new PrimitiveObjectState
-        {
-            PrimitiveType = SelectedPrimitive.ToString(),
-            ToolType = SelectedTool.ToString(),
-            ObjectPoints = _tempPoints
-                .Take(2)
-                .Select(p => new VecEditor.Core.Geometry.Point2(p.X, p.Y))
-                .ToList(),
-            StrokeColor = SelectedStrokeColor,
-            StrokeThickness = SelectedStrokeThickness
-        };
+        (
+            SelectedPrimitive,
+            SelectedTool,
+            _tempPoints,
+            SelectedStrokeColor,
+            SelectedStrokeThickness
+        );
 
         PrimitiveObjects.Add(primitive);
+        historyManager.addState(ObjectsState);
+
 
         _tempPoints.Clear();
         PreviewStartPoint = null;
         PreviewEndPoint = null;
         IsDrawing = false;
+
 
         RaiseGeometryPropertiesChanged();
     }
