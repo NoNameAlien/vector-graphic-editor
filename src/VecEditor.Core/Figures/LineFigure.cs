@@ -10,8 +10,8 @@ namespace VecEditor.Core.Figures;
 public sealed class LineFigure : IFigure
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Point2 A { get; }
-    public Point2 B { get; }
+    public Point2 A { get; set; }
+    public Point2 B { get; set; }
 
     [JsonIgnore]
     public RectD Bounds => RectD.FromTwoPoints(A, B);

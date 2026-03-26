@@ -6,8 +6,8 @@ namespace VecEditor.Core.Figures;
 public sealed class RectangleFigure : IFigure
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Point2 A { get; }
-    public Point2 B { get; }
+    public Point2 A { get; set; }
+    public Point2 B { get; set; }
 
     public RectD Bounds => RectD.FromTwoPoints(A, B);
 
