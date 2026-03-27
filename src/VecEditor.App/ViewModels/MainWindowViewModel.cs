@@ -1,11 +1,28 @@
-using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
+using System.Collections.ObjectModel;
+using System.Runtime.Intrinsics.Arm;
 using VecEditor.ViewModel;
 
 namespace VecEditor.App.ViewModels;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
+    private double _zoom = 1.0;
+
+    public double Zoom
+    {
+        get => _zoom;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _zoom, Math.Max(0.1, Math.Min(5.0, value)));
+            this.RaisePropertyChanged(nameof(ZoomPercent));
+        }
+    }
+
+    public string ZoomPercent => $"{Zoom * 100:F0}%";
+
+    
     public enum ToolType
     {
         None,
@@ -107,5 +124,19 @@ public partial class MainWindowViewModel : ReactiveObject
 
         UndoCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => Undo());
         RedoCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(() => Redo());
+
+        NewProjectCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(async () => await NewProjectAsync());
+        OpenCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(async () => await OpenAsync());
+        SaveCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(async () => await SaveAsync());
+        SaveAsCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(async () => await SaveAsAsync());
+        ZoomInCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(ZoomIn);
+        ZoomOutCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(ZoomOut);
+        ZoomResetCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(ZoomReset);
+    }
+
+    private void Exit()
+    {
+        // Закрыть приложение
+        Environment.Exit(0);
     }
 }

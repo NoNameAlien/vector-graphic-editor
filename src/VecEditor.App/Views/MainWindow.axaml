@@ -29,19 +29,21 @@
 			<!-- СТРОКА МЕНЮ (первая строка) -->
 			<Menu Grid.Row="0" Margin="5">
 				<MenuItem Header="_File">
-					<MenuItem Header="_New"/>
-					<MenuItem Header="_Open"/>
-					<MenuItem Header="_Save"/>
+					<MenuItem x:Name="NewMenuItem" Header="_New" Command="{Binding NewProjectCommand}" InputGesture="Ctrl+N"/>
+					<MenuItem x:Name="OpenMenuItem" Header="_Open" Command="{Binding OpenCommand}" InputGesture="Ctrl+O"/>
+					<MenuItem x:Name="SaveMenuItem" Header="_Save" Command="{Binding SaveCommand}" InputGesture="Ctrl+S"/>
 					<Separator/>
-					<MenuItem Header="E_xit"/>
+					<MenuItem x:Name="ExitMenuItem" Header="E_xit" Command="{Binding ExitCommand}"/>
 				</MenuItem>
 				<MenuItem Header="_Edit">
-					<MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
-					<MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
+					<MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGesture="Ctrl+Z"/>
+					<MenuItem Header="_Redo" Command="{Binding RedoCommand}" InputGesture="Ctrl+Y"/>
 				</MenuItem>
 				<MenuItem Header="_View">
-					<MenuItem Header="Zoom In"/>
-					<MenuItem Header="Zoom Out"/>
+					<MenuItem Header="Zoom In" Command="{Binding ZoomInCommand}" InputGesture="Ctrl++"/>
+					<MenuItem Header="Zoom Out" Command="{Binding ZoomOutCommand}" InputGesture="Ctrl+-"/>
+					<Separator/>
+					<MenuItem Header="Zoom Reset" Command="{Binding ZoomResetCommand}" InputGesture="Ctrl+0"/>
 				</MenuItem>
 			</Menu>
 
