@@ -113,4 +113,11 @@ public class HistoryManager
         editorObjectsStates.Add(new(new_state));
     }
 
+    public void Clear()
+    {
+        editorObjectsStates.Clear();
+        _index = -1;
+        addState(new EditorObjectsState()); // Добавляем пустое состояние
+    }
+
 }

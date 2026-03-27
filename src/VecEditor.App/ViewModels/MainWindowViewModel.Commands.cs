@@ -22,6 +22,16 @@ public partial class MainWindowViewModel
     public ICommand UndoCommand { get; }
     public ICommand RedoCommand { get; }
 
+    public ICommand NewProjectCommand { get; }
+    public ICommand OpenCommand { get; }
+    public ICommand SaveCommand { get; }
+    public ICommand SaveAsCommand { get; }
+
+    public ICommand ExitCommand { get; }
+    public ICommand ZoomInCommand { get; }
+    public ICommand ZoomOutCommand { get; }
+
+    public ICommand ZoomResetCommand { get; }
     private void SelectTool(ToolType tool)
     {
         if (SelectedTool == tool)
