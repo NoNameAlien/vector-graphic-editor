@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\VecEditor.App\VecEditor.App.csproj" />
-    <ProjectReference Include="..\src\VecEditor.Core\VecEditor.Core.csproj" />
-    <ProjectReference Include="..\src\VecEditor.IO\VecEditor.IO.csproj" />
-    <ProjectReference Include="..\src\VecEditor.ViewModel\VecEditor.ViewModel.csproj" />
+    <ProjectReference Include="..\..\src\VecEditor.App\VecEditor.App.csproj" />
+    <ProjectReference Include="..\..\src\VecEditor.Core\VecEditor.Core.csproj" />
+    <ProjectReference Include="..\..\src\VecEditor.IO\VecEditor.IO.csproj" />
+    <ProjectReference Include="..\..\src\VecEditor.ViewModel\VecEditor.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
